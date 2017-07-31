@@ -1,0 +1,88 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Usuarios</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Nickname</th>
+      <th>Password</th>
+      <th>Secret</th>
+      <th>Secret key</th>
+      <th>Secret iv</th>
+      <th>Desecriptada</th>
+
+
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @usuarios.each do |usuario| %>
+      <tr>
+        <td><%= usuario.name %></td>
+        <td><%= usuario.nickname %></td>
+        <td><%= usuario.password %></td>
+        <td><%= usuario.secret %></td>
+        <td><%= usuario.secret_key %></td>
+        <td><%= usuario.secret_iv %></td>
+
+        <td><%=
+          begin
+             usuario.secret.decrypt 'miracle'
+           rescue
+             @error_message="#{$!}"
+           ensure
+          end
+        %></td>
+
+
+        <td><%= link_to 'Show', usuario %></td>
+        <td><%= link_to 'Edit', edit_usuario_path(usuario) %></td>
+        <td><%= link_to 'Destroy', usuario, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+
+  </tbody>
+</table>
+<br>
+
+
+<br>
+<%=
+  begin
+    rsa = Cryptosystem::RSA.new
+    @encrypted_value = rsa.encrypt('secret') # => "JxpuhTpEqRtMLmaSfaq/X6XONkBnMe..."
+   #  rsa.decrypt(encrypted_value) # => "secret"
+
+
+
+  rescue
+    @error_message="#{$!}"
+  ensure
+  end
+%>
+
+
+<br>
+<%=
+  begin
+    private_key_file = 'config/private.pem';
+   password = 'miracle'
+   private_key = OpenSSL::PKey::RSA.new(File.read(private_key_file),password)
+   string = private_key.private_decrypt(Base64.decode64(@encrypted_value))
+
+
+     rescue
+       @error_message="#{$!}"
+     ensure
+  end
+%>
+
+<br>
+
+
+
+
+<%= link_to 'New Usuario', new_usuario_path %>
