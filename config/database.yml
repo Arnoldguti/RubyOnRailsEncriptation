@@ -1,0 +1,43 @@
+# SQLite version 3.x
+#   gem install sqlite3
+#
+#   Ensure the SQLite 3 gem is defined in your Gemfile
+#   gem 'sqlite3'
+#
+default: &default
+  adapter: mysql2
+  encoding: utf8
+  # For details on connection pooling, see rails configuration guide
+  # http://guides.rubyonrails.org/configuring.html#database-pooling
+  pool: 5
+
+development:
+  <<: *default
+  adaapter: mysql2
+  encoding: utf8
+  database: codehero_development
+  username: root
+  password: '**4rg4**'
+  host: 127.0.0.1
+  port: 3306
+
+# Warning: The database defined as "test" will be erased and
+# re-generated from your development database when you run "rake".
+# Do not set this db to the same as development or production.
+test:
+  adaapter: mysql2
+  encoding: utf8
+  database: codehero_test
+  username: root
+  password: '**4rg4**'
+  host: 127.0.0.1
+  port: 3306
+
+production:
+   adaapter: mysql
+   encoding: utf8
+   database: codehero_production
+   username: root
+   password: '**4rg4**'
+   host: 127.0.0.1
+   port: 3306
